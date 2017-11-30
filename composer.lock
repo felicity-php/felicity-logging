@@ -4,8 +4,97 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7674c66339884c99eaf10ce2e381bc29",
+    "content-hash": "90257b6e0c5eb8588245e7fc763ddfbc",
     "packages": [
+        {
+            "name": "felicity-php/felicity-config",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/felicity-php/felicity-config.git",
+                "reference": "84a093a4e4bdbd339ffdbfbfa29e9a4aadf544e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/felicity-php/felicity-config/zipball/84a093a4e4bdbd339ffdbfbfa29e9a4aadf544e8",
+                "reference": "84a093a4e4bdbd339ffdbfbfa29e9a4aadf544e8",
+                "shasum": ""
+            },
+            "require": {
+                "roave/security-advisories": "dev-master"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "library",
+            "extra": {
+                "bootstrap": [
+                    {
+                        "type": "classMethod",
+                        "class": "felicity\\config\\Bootstrap",
+                        "method": "run"
+                    }
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "felicity\\config\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "TJ Draper",
+                    "email": "tj@buzzingpixel.com",
+                    "homepage": "https://buzzingpixel.com"
+                }
+            ],
+            "description": "Easy set and get of config in PHP",
+            "time": "2017-11-26T02:32:28+00:00"
+        },
+        {
+            "name": "felicity-php/felicity-datamodel",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/felicity-php/felicity-datamodel.git",
+                "reference": "34fecf27914f694cf272ea35eadf7210c7cf796f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/felicity-php/felicity-datamodel/zipball/34fecf27914f694cf272ea35eadf7210c7cf796f",
+                "reference": "34fecf27914f694cf272ea35eadf7210c7cf796f",
+                "shasum": ""
+            },
+            "require": {
+                "roave/security-advisories": "dev-master"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "felicity\\datamodel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "TJ Draper",
+                    "email": "tj@buzzingpixel.com",
+                    "homepage": "https://buzzingpixel.com"
+                }
+            ],
+            "description": "PHP Data Modeling",
+            "time": "2017-11-25T03:52:37+00:00"
+        },
         {
             "name": "roave/security-advisories",
             "version": "dev-master",
