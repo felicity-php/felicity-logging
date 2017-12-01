@@ -12,6 +12,7 @@ use felicity\config\Config;
 use felicity\logging\models\LogModel;
 use felicity\datamodel\ModelCollection;
 use felicity\logging\services\FileLoggingService;
+use felicity\logging\services\WebDisplayService;
 
 /**
  * Class Logging
@@ -97,6 +98,24 @@ class Logger
     }
 
     /**
+     * Get's the Logger src directory
+     * @return string
+     */
+    public static function srcDir() : string
+    {
+        return __DIR__;
+    }
+
+    /**
+     * Get's the Logger src directory
+     * @return string
+     */
+    public function getSrcDir() : string
+    {
+        return __DIR__;
+    }
+
+    /**
      * Gets a FileLoggingService instance
      * @return FileLoggingService
      */
@@ -112,6 +131,24 @@ class Logger
     public function getFileLoggingService() : FileLoggingService
     {
         return $this->fileLoggingService;
+    }
+
+    /**
+     * Gets a WebDisplayService instance
+     * @return WebDisplayService
+     */
+    public static function webDisplayService() : WebDisplayService
+    {
+        return new WebDisplayService(self::srcDir());
+    }
+
+    /**
+     * Gets a WebDisplayService instance
+     * @return WebDisplayService
+     */
+    public function getWebDisplayService() : WebDisplayService
+    {
+        return self::webDisplayService();
     }
 
     /**
@@ -139,17 +176,18 @@ class Logger
         int $level,
         string $category = 'application'
     ) {
+        $levelString = self::$levelStringMap[$level] ?? $level;
+
         $this->instanceLogs->addModel(new LogModel([
             'message' => $msg,
             'level' => $level,
+            'levelString' => $levelString,
             'category' => $category,
         ]));
 
         if (! $this->enableFileLogging) {
             return;
         }
-
-        $levelString = self::$levelStringMap[$level] ?? $level;
 
         if (! $this->enableFileLogging || $level > $this->fileLogLevel) {
             return;
@@ -192,5 +230,49 @@ class Logger
     public function getStartTime() : float
     {
         return $this->startTime;
+    }
+
+    /**
+     * Gets elapsed time
+     * @return float
+     */
+    public static function elapsedTime() : float
+    {
+        return self::getInstance()->getElapsedTime();
+    }
+
+    /**
+     * Gets elapsed time
+     * @return float
+     */
+    public function getElapsedTime() : float
+    {
+        return microtime(true) - $this->startTime;
+    }
+
+    /**
+     * Gets html display
+     * @return string
+     * @throws \Exception
+     */
+    public static function htmlDisplay() : string
+    {
+        return self::webDisplayService()->getHtmlDisplay(
+            self::logs(),
+            self::elapsedTime()
+        );
+    }
+
+    /**
+     * Gets html display
+     * @return string
+     * @throws \Exception
+     */
+    public function getHtmlDisplay() : string
+    {
+        return self::webDisplayService()->getHtmlDisplay(
+            self::logs(),
+            self::elapsedTime()
+        );
     }
 }

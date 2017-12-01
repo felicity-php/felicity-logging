@@ -1,0 +1,333 @@
+<style type="text/css">
+    body.has-felicity-logging-display {
+        padding-bottom: calc(40vh + 20px);
+    }
+
+    .felicity-logging-display {
+        background-color: #fafafa;
+        border-top: 1px solid #e2e2e2;
+        bottom: 0;
+        box-shadow: 0 -2px 10px 2px rgba(0,0,0,0.06);
+        box-sizing: border-box;
+        display: none;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        height: 40vh;
+        left: 0;
+        position: fixed;
+        width: 100%;
+        z-index: 999999999999;
+    }
+
+    .felicity-logging-display * {
+        box-sizing: border-box;
+    }
+
+    .felicity-logging-display--is-active {
+        display: block;
+    }
+
+    .felicity-logging-display__inner {
+        height: 40vh;
+        overflow: scroll;
+    }
+
+    .felicity-logging-display-bar {
+        background-color: #eeeeee;
+        text-align: center;
+    }
+
+    .felicity-logging-display-bar__item {
+        display: inline-block;
+        padding: 10px;
+    }
+
+    .felicity-logging-display-bar__item-text,
+    .felicity-logging-display-bar__item-color-block {
+        display: inline-block;
+        margin: 2px;
+        vertical-align: middle;
+    }
+
+    .felicity-logging-display-bar__item-color-block {
+        background-color: #c0c0c0;
+        border-radius: 3px;
+        padding: 4px 6px;
+    }
+
+    .felicity-logging-display-bar__item-color-block--is-green {
+        background-color: #009500;
+        color: #fff;
+    }
+
+    .felicity-logging-display-bar__item-color-block--is-blue {
+        background-color: #3eadff;
+        color: #fff;
+    }
+
+    .felicity-logging-grid-items {
+        list-style: none;
+        margin: 0;
+        height: auto;
+        overflow: auto;
+        padding: 0;
+    }
+
+    .felicity-logging-grid-items__item {
+        padding: 10px;
+    }
+
+    .felicity-logging-grid-items__item:nth-child(odd) {
+        background-color: #f4f4f4;
+    }
+
+    .felicity-logging-grid-items__item--heading {
+        display: none;
+    }
+
+    .felicity-logging-grid-items__item--heading .felicity-logging-grid-items__col {
+        color: #3eadff;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .felicity-logging-grid-items__col {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .felicity-logging-grid-items__col--message {
+        border-top: 1px solid #e2e2e2;
+        display: block;
+        margin-top: 8px;
+        padding-top: 8px;
+    }
+
+    @media (min-width: 1000px) {
+        .felicity-logging-grid-items {
+            border-left: 1px solid #e2e2e2;
+            border-top: 1px solid #e2e2e2;
+            margin: 20px;
+        }
+
+        .felicity-logging-grid-items__item {
+            display: -ms-flex;
+            display: -webkit-flex;
+            display: flex;
+            padding: 0;
+        }
+
+        .felicity-logging-grid-items__item--heading {
+            display: block;
+        }
+
+        .felicity-logging-grid-items__col--message {
+            border-top: 0;
+            display: inline-block;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .felicity-logging-grid-items__col {
+            border-bottom: 1px solid #e2e2e2;
+            border-right: 1px solid #e2e2e2;
+            padding: 10px;
+        }
+
+        .felicity-logging-grid-items__col-mobile-heading {
+            display: none;
+        }
+
+        .felicity-logging-grid-items__col--number {
+            width: 40px;
+        }
+
+        .felicity-logging-grid-items__col--time,
+        .felicity-logging-grid-items__col--level,
+        .felicity-logging-grid-items__col--category {
+            width: 90px;
+        }
+
+        .felicity-logging-grid-items__col--message {
+            width: calc(100% - 310px);
+        }
+    }
+</style>
+
+<div class="felicity-logging-display js-felicity-logging-display">
+    <div class="felicity-logging-display__inner">
+        <div class="felicity-logging-display-bar">
+            <div class="felicity-logging-display-bar__item">
+                <div class="felicity-logging-display-bar__item-text">
+                    PHP
+                </div>
+                <div class="felicity-logging-display-bar__item-color-block">
+                    {{ phpVersion }}
+                </div>
+            </div>
+            <div class="felicity-logging-display-bar__item">
+                <div class="felicity-logging-display-bar__item-text">
+                    Status
+                </div>
+                <div
+                    class="felicity-logging-display-bar__item-color-block{% if httpStatusCode == 200 %} felicity-logging-display-bar__item-color-block--is-green{% else %} felicity-logging-display-bar__item-color-block--is-red{% endif %}"
+                >
+                    {{ httpStatusCode }}
+                </div>
+            </div>
+            <div class="felicity-logging-display-bar__item">
+                <div class="felicity-logging-display-bar__item-text">
+                    Time
+                </div>
+                <div
+                    class="felicity-logging-display-bar__item-color-block felicity-logging-display-bar__item-color-block--is-blue"
+                >
+                    {{ elapsedTime|number_format(4) }}s
+                </div>
+            </div>
+            <div class="felicity-logging-display-bar__item">
+                <div class="felicity-logging-display-bar__item-text">
+                    Peak Memory
+                </div>
+                <div
+                    class="felicity-logging-display-bar__item-color-block felicity-logging-display-bar__item-color-block--is-blue"
+                >
+                    {{ memoryPeakUsage }}
+                </div>
+            </div>
+            <div class="felicity-logging-display-bar__item">
+                <div class="felicity-logging-display-bar__item-text">
+                    Log{% if logs.count > 1 %}s{% endif %}
+                </div>
+                <div
+                    class="felicity-logging-display-bar__item-color-block felicity-logging-display-bar__item-color-block--is-blue"
+                >
+                    {{ logs.count }}
+                </div>
+            </div>
+        </div>
+        <div class="felicity-logging-display-body">
+            <ul class="felicity-logging-grid-items">
+                <li class="felicity-logging-grid-items__item felicity-logging-grid-items__item--heading">
+                    <div
+                        class="felicity-logging-grid-items__col felicity-logging-grid-items__col--number"
+                    >
+                        #
+                    </div>
+                    <div
+                        class="felicity-logging-grid-items__col felicity-logging-grid-items__col--time"
+                    >
+                        Time
+                    </div>
+                    <div
+                        class="felicity-logging-grid-items__col felicity-logging-grid-items__col--level"
+                    >
+                        Level
+                    </div>
+                    <div
+                        class="felicity-logging-grid-items__col felicity-logging-grid-items__col--category"
+                    >
+                        Category
+                    </div>
+                    <div
+                        class="felicity-logging-grid-items__col felicity-logging-grid-items__col--message"
+                    >
+                        Message
+                    </div>
+                </li>
+                {% set counter = 1 %}
+                {% for log in logs %}
+                    <li class="felicity-logging-grid-items__item">
+                        <div
+                            class="felicity-logging-grid-items__col felicity-logging-grid-items__col--number"
+                        >
+                            <span class="felicity-logging-grid-items__col-mobile-heading">#</span>{{ counter }}
+                        </div>
+                        <div
+                            class="felicity-logging-grid-items__col felicity-logging-grid-items__col--time"
+                        >
+                            <span class="felicity-logging-grid-items__col-mobile-heading">Time: </span>{{ log.time.format('H:i:s') }}
+                        </div>
+                        <div
+                            class="felicity-logging-grid-items__col felicity-logging-grid-items__col--level"
+                        >
+                            <span class="felicity-logging-grid-items__col-mobile-heading">Level: </span> {{ log.levelString }}
+                        </div>
+                        <div
+                            class="felicity-logging-grid-items__col felicity-logging-grid-items__col--category"
+                        >
+                            <span class="felicity-logging-grid-items__col-mobile-heading">Category: </span> {{ log.category }}
+                        </div>
+                        <div
+                            class="felicity-logging-grid-items__col felicity-logging-grid-items__col--message"
+                        >
+                            {{ log.message|felicityLoggingDisplay|raw }}
+                        </div>
+                    </li>
+                    {% set counter = counter + 1 %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript">
+    function displayLogger() {
+        var els = document.getElementsByClassName('js-felicity-logging-display');
+
+        document.body.classList.add('has-felicity-logging-display');
+
+        for (var i = 0; i < els.length; i++) {
+            els[i].classList.add('felicity-logging-display--is-active');
+        }
+    }
+
+    function hideLogger() {
+        var els = document.getElementsByClassName('js-felicity-logging-display');
+
+        document.body.classList.remove('has-felicity-logging-display');
+
+        for (var i = 0; i < els.length; i++) {
+            els[i].classList.remove('felicity-logging-display--is-active');
+        }
+    }
+
+    function felicityLoggerKeyEvents() {
+        var $cmdKey = 91;
+        var $esc = 27;
+        var cmdPressed = false;
+        var loggerIsDisplayed = false;
+
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === $cmdKey) {
+                cmdPressed = true;
+                return;
+            }
+
+            if (e.keyCode !== $esc || ! cmdPressed) {
+                return;
+            }
+
+            if (! loggerIsDisplayed) {
+                displayLogger();
+                loggerIsDisplayed = true;
+                return;
+            }
+
+
+            loggerIsDisplayed = false;
+
+            hideLogger();
+        });
+
+        document.addEventListener('keyup', function(e) {
+            if (e.keyCode !== $cmdKey) {
+                return;
+            }
+
+            cmdPressed = false;
+        });
+    }
+
+    felicityLoggerKeyEvents();
+</script>
